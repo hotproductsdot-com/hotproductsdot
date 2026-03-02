@@ -1,1 +1,88 @@
-Product,Category,Price,BSR,Reviews,Affiliate_Potential
+Product Name,Category,Price Range,Review Count,Rating,BSR,Affiliate Potential
+Apple MacBook Air 13 M4,Laptops,$1000-1500,8500,4.8,#1,9
+MacBook Air M4 (Early 2025),Laptops,$950-1200,7200,4.7,#2,9
+Dell XPS 15 Laptop,Laptops,$1400-2000,6800,4.6,#3,8
+ASUS ROG Strix G16 Gaming Laptop,Gaming Laptops,$1800-2200,5200,4.7,#1,8
+Razer Blade 14 Gaming Laptop,Gaming Laptops,$1600-1900,4100,4.6,#2,8
+Samsung Galaxy Book5 Pro 360,Laptops,$1200-1600,3500,4.5,#4,7
+Microsoft Surface Pro 11th Edition,Laptops,$1000-1400,4200,4.6,#5,7
+ASUS ROG Zephyrus G14 Gaming,Gaming Laptops,$1400-1800,3800,4.6,#3,7
+Lenovo ThinkPad X1 Carbon Gen 12,Laptops,$950-1300,5100,4.7,#6,7
+Apple AirPods Max,Headphones,$549,6200,4.8,#1,9
+Beats Studio3 Wireless,Headphones,$349-399,4500,4.5,#2,7
+Apple AirPods Pro 2nd Gen,Headphones,$249,9800,4.7,#1,8
+Sony WH-1000XM5 Headphones,Audio,$380-450,7600,4.6,#3,8
+Bose QuietComfort Ultra Headphones,Headphones,$429,3200,4.5,#4,7
+Sonos Era 300,Speakers,$449,2800,4.7,#1,8
+Bose SoundLink Max Speaker,Speakers,$399,4100,4.6,#2,7
+JBL Boombox 4,Speakers,$249,3500,4.5,#3,7
+Sony ULT Field 7 Speaker,Speakers,$199-249,2900,4.6,#4,7
+Samsung HW-Q930D Soundbar,Audio,$1299,2200,4.7,#1,8
+Samsung HW-Q800D Soundbar,Audio,$799,3100,4.6,#2,7
+Sonos Beam Gen 2,Speakers,$449,4200,4.7,#3,7
+Alienware 27" AW2725DM Monitor,Monitors,$499-599,1800,4.7,#1,8
+Dell SE2726HG Monitor,Monitors,$349,2600,4.5,#2,7
+SANSUI 27-inch 240Hz Monitor,Monitors,$299-349,1900,4.6,#3,7
+LG UltraWide Gaming Monitor 34",Monitors,$699,2100,4.6,#4,8
+ASUS PA247CV Professional Monitor,Monitors,$249,3400,4.7,#5,7
+Gaming PC - RTX 5090 System,Gaming Desktops,$4500-5500,890,4.8,#1,9
+Gaming PC - RTX 5080 System,Gaming Desktops,$2400-2900,1200,4.7,#2,8
+Gaming PC - RTX 5070 Ti System,Gaming Desktops,$1700-2000,1800,4.6,#3,7
+Razer Viper V3 Pro Mouse,Gaming Peripherals,$139,2800,4.7,#1,8
+Logitech G502 HERO Mouse,Gaming Peripherals,$49-79,8900,4.6,#2,8
+Logitech G Pro X Mouse,Gaming Peripherals,$69-99,6200,4.7,#3,7
+SteelSeries Rival 650,Gaming Peripherals,$79,3100,4.5,#4,7
+Razer DeathAdder V3 Mouse,Gaming Peripherals,$59-79,4500,4.6,#5,7
+SteelSeries Arctis Nova Pro Headset,Gaming Headsets,$249-349,2200,4.7,#1,8
+HyperX Cloud III Headset,Gaming Headsets,$99-129,3800,4.6,#2,7
+Razer BlackShark V2 X Headset,Gaming Headsets,$99,2900,4.5,#3,7
+Logitech G435 Wireless Headset,Gaming Headsets,$99-129,2100,4.6,#4,7
+HOROW Black Smart Toilet,Smart Home,$999-1499,1200,4.8,#1,9
+3D Face Recognition Smart Lock,Smart Home,$299-399,850,4.7,#1,8
+Moen Smart Shower,Smart Home,$399-499,620,4.6,#1,7
+Amazon Echo Show 10 4th Gen,Smart Displays,$249-299,2100,4.6,#1,7
+Google Nest Hub Max 2nd Gen,Smart Displays,$249-299,1800,4.5,#2,7
+Apple HomePod mini 2nd Gen,Speakers,$99,3200,4.7,#3,8
+Ring Video Doorbell Pro 2,Security,$249,3800,4.6,#1,8
+Arlo Ultra 2 Floodlight,Security,$399,1900,4.7,#2,8
+Nest Learning Thermostat,Smart Home,$249-299,4100,4.7,#1,7
+Ecobee Smart Thermostat Premium,Smart Home,$299-349,2600,4.6,#2,7
+iRobot Roomba j7+,Smart Home,$799,2100,4.6,#1,7
+Amazon Echo Studio 2025,Speakers,$199-249,1800,4.7,#4,7
+Aqara Camera Hub G5 Pro,Security,$299-349,920,4.7,#3,8
+SwitchBot Curtain 3,Smart Home,$199-249,1400,4.6,#1,7
+Dreo 44 in Smart Ceiling Fan,Smart Home,$299-349,1100,4.5,#1,7
+Canon EOS R5 Camera,Photography,$3299-3799,2800,4.7,#1,9
+Sony A7R V Camera,Photography,$3198,2400,4.8,#2,8
+Nikon Z9 Camera,Photography,$5496,1800,4.7,#3,9
+DJI Air 3S Drone,Drones,$999-1099,3200,4.8,#1,9
+DJI Mini 4 Pro Drone,Drones,$459-559,4100,4.7,#2,8
+Anker Nebula Mars 3 Projector,Smart Home,$599-699,1600,4.6,#1,8
+Breville Espresso Machine,Kitchen,$799-999,1200,4.6,#1,7
+Instant Pot Pro Max,Kitchen,$199-249,2100,4.7,#2,7
+Ninja AF400 Air Fryer,Kitchen,$199-249,3800,4.6,#3,8
+Dyson V15 Detect Vacuum,Home,$749-849,1900,4.7,#1,8
+Shark Stratos Vacuum,Home,$499-599,2100,4.6,#2,7
+Nuwave OxyPure Air Purifier,Smart Home,$399-499,980,4.7,#1,7
+GoveeLife Smart Purifier,Smart Home,$299-349,750,4.5,#2,6
+NuWave Precision Induction Cooktop,Kitchen,$149-199,1800,4.5,#1,7
+Smeg Retro Toaster,Kitchen,$249-299,950,4.6,#2,6
+Herman Miller Aeron Chair,Furniture,$1295-1395,2100,4.8,#1,9
+Autonomous Standing Desk,Furniture,$399-599,1800,4.6,#1,8
+Flexispot Standing Desk Pro,Furniture,$349-449,2200,4.7,#2,8
+Fitbit Sense 2,Fitness,$299-349,1200,4.5,#1,7
+Peloton Bike+,Fitness,$2495,850,4.6,#1,8
+Theragun Pro Massage,Fitness,$349,3100,4.7,#1,7
+GoPro Hero 12 Black,Photography,$399-449,1600,4.7,#1,8
+Canon PowerShot G7 X Mark III,Photography,$749,2200,4.6,#2,7
+Rode Wireless GO II Microphone,Photography,$299-349,2000,4.7,#3,7
+BenQ SW240 Monitor,Photography,$699,1200,4.8,#1,8
+DJI Inspire 3 Drone,Drones,$2015-2199,950,4.8,#2,9
+Zhiyun Crane 4S Stabilizer,Photography,$599-699,1100,4.6,#1,7
+Elinchrom ELB 500 TTL,Photography,$4995,420,4.8,#1,9
+Profoto B10 Plus Head,Photography,$4995,380,4.7,#2,9
+Sony FE 24-70mm f/2.8 GM,Photography,$1998,1800,4.8,#1,9
+Canon RF 70-200mm f/2.8,Photography,$2999,1200,4.7,#2,8
+Leica M11 Camera,Photography,$8195,680,4.9,#1,10
+Hasselblad 907X-100C,Photography,$31000,150,4.8,#1,10
+Zeiss Otus 85mm f/1.4,Photography,$949,800,4.9,#1,9
