@@ -30,11 +30,15 @@ function parsePrice(raw: string): { display: string; min: number } {
 
   const cleaned = raw.replace(/[$,]/g, "").trim();
 
+  // Skip non-numeric price values (CSV has "TV", "Robotics", "TV device", "?" in some rows)
+  if (!/\d/.test(cleaned)) return { display: "Check Price", min: 0 };
+
   // Handle range like "1000-1500" or "$1000-1500"
   const rangeMatch = cleaned.match(/(\d+)\s*-\s*(\d+)/);
   if (rangeMatch) {
     const low = parseInt(rangeMatch[1], 10);
     const high = parseInt(rangeMatch[2], 10);
+    if (low === 0 && high === 0) return { display: "Check Price", min: 0 };
     return {
       display: `$${low.toLocaleString()} - $${high.toLocaleString()}`,
       min: low,
@@ -45,10 +49,12 @@ function parsePrice(raw: string): { display: string; min: number } {
   const singleMatch = cleaned.match(/(\d+)/);
   if (singleMatch) {
     const price = parseInt(singleMatch[1], 10);
+    // Treat $0 as unknown (CSV has "000" for Leica Q3 etc.)
+    if (price === 0) return { display: "Check Price", min: 0 };
     return { display: `$${price.toLocaleString()}`, min: price };
   }
 
-  return { display: raw, min: 0 };
+  return { display: "Check Price", min: 0 };
 }
 
 function parseReviewCount(raw: string): number {
