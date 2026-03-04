@@ -49,8 +49,8 @@ function slugify(text: string): string {
 function parsePrice(raw: string): { display: string; min: number } {
   if (!raw) return { display: "Check Price", min: 0 };
   const cleaned = raw.replace(/[$,]/g, "").trim();
-  if (!/\\d/.test(cleaned)) return { display: "Check Price", min: 0 };
-  const rangeMatch = cleaned.match(/(\\d+)\\s*-\\s*(\\d+)/);
+  if (!/\d/.test(cleaned)) return { display: "Check Price", min: 0 };
+  const rangeMatch = cleaned.match(/(\d+)\s*-\s*(\d+)/);
   if (rangeMatch) {
     const low = parseInt(rangeMatch[1], 10);
     const high = parseInt(rangeMatch[2], 10);
@@ -60,7 +60,7 @@ function parsePrice(raw: string): { display: string; min: number } {
       min: low,
     };
   }
-  const singleMatch = cleaned.match(/(\\d+)/);
+  const singleMatch = cleaned.match(/(\d+)/);
   if (singleMatch) {
     const price = parseInt(singleMatch[1], 10);
     if (price === 0) return { display: "Check Price", min: 0 };
@@ -153,11 +153,11 @@ export function getAllProducts(): Product[] {
       const csvAmazonUrl = (row["Amazon URL"] || "").trim();
       const amazonUrl = csvAmazonUrl || buildAmazonUrl(name);
       
-      const asinMatch = amazonUrl.match(/\\/(?:dp|gp\\/product)\\/([A-Z0-9]{10})/i);
+      const asinMatch = amazonUrl.match(/\/(?:dp|gp\/product)\/([A-Z0-9]{10})/i);
       const asin = asinMatch ? asinMatch[1] : null;
       
       const imageUrl = asin 
-        ? `https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&MarketPlace=US&ASIN=\${asin}&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=_SL500_`
+        ? `https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&MarketPlace=US&ASIN=${asin}&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=_SL500_`
         : (PRODUCT_IMAGES[slug] || "");
 
       products.push({
