@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ProductGrid from "@/components/ProductGrid";
-import { getAllProducts, getProductsByCategory } from "@/lib/products";
+import { getAllProducts, getProductsByCategorySlug } from "@/lib/products";
 import { getAllCategories, getCategoryBySlug } from "@/lib/categories";
 
 interface Props {
@@ -29,7 +29,7 @@ export default async function CategoryPage({ params }: Props) {
   const category = getCategoryBySlug(slug);
   if (!category) notFound();
 
-  const products = getProductsByCategory(slug)
+  const products = getProductsByCategorySlug(slug)
     .sort((a, b) => b.affiliatePotential - a.affiliatePotential || b.rating - a.rating);
 
   const allCategories = getAllCategories();
@@ -57,26 +57,35 @@ export default async function CategoryPage({ params }: Props) {
         </p>
       </div>
 
-      {/* Products */}
-      <ProductGrid products={products} />
+      {/* Products grid */}
+      {products.length > 0 ? (
+        <ProductGrid products={products} />
+      ) : (
+        <div className="text-center py-20">
+          <p className="text-zinc-400 text-lg">No products found in this category.</p>
+          <Link href="/products" className="text-orange-400 hover:text-orange-300 mt-4 inline-block">
+            Browse all products
+          </Link>
+        </div>
+      )}
 
-      {/* Related Categories */}
+      {/* Other categories */}
       {allCategories.length > 1 && (
         <section className="mt-16">
           <h2 className="text-xl font-bold text-white mb-6">Browse Other Categories</h2>
           <div className="flex flex-wrap gap-3">
             {allCategories
               .filter((c) => c.slug !== slug)
-              .slice(0, 12)
-              .map((cat) => (
+              .slice(0, 8)
+              .map((c) => (
                 <Link
-                  key={cat.slug}
-                  href={`/category/${cat.slug}`}
-                  className="flex items-center gap-2 bg-[#141416] border border-[#1f1f23] rounded-lg px-4 py-2 text-sm text-zinc-400 hover:text-white hover:border-orange-500/30 transition-all"
+                  key={c.slug}
+                  href={`/category/${c.slug}`}
+                  className="flex items-center gap-2 bg-[#141416] border border-[#1f1f23] rounded-lg px-4 py-2 text-sm text-zinc-300 hover:text-white hover:border-zinc-600 transition-colors"
                 >
-                  <span>{cat.icon}</span>
-                  <span>{cat.name}</span>
-                  <span className="text-zinc-600 text-xs">({cat.count})</span>
+                  <span>{c.icon}</span>
+                  <span>{c.name}</span>
+                  <span className="text-zinc-500 text-xs">({c.count})</span>
                 </Link>
               ))}
           </div>
