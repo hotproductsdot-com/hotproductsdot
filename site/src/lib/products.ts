@@ -47,13 +47,8 @@ function slugify(text: string): string {
 
 function parsePrice(raw: string): { display: string; min: number } {
   if (!raw) return { display: "Check Price", min: 0 };
-
   const cleaned = raw.replace(/[$,]/g, "").trim();
-
-  // Skip non-numeric price values (CSV has "TV", "Robotics", "TV device", "?" in some rows)
   if (!/\d/.test(cleaned)) return { display: "Check Price", min: 0 };
-
-  // Handle range like "1000-1500" or "$1000-1500"
   const rangeMatch = cleaned.match(/(\d+)\s*-\s*(\d+)/);
   if (rangeMatch) {
     const low = parseInt(rangeMatch[1], 10);
@@ -64,16 +59,12 @@ function parsePrice(raw: string): { display: string; min: number } {
       min: low,
     };
   }
-
-  // Handle single price like "549" or "$549"
   const singleMatch = cleaned.match(/(\d+)/);
   if (singleMatch) {
     const price = parseInt(singleMatch[1], 10);
-    // Treat $0 as unknown (CSV has "000" for Leica Q3 etc.)
     if (price === 0) return { display: "Check Price", min: 0 };
     return { display: `$${price.toLocaleString()}`, min: price };
   }
-
   return { display: "Check Price", min: 0 };
 }
 
@@ -94,8 +85,6 @@ function buildAmazonUrl(productName: string): string {
 
 function normalizeCategory(raw: string): string {
   const trimmed = (raw || "").trim();
-
-  // Fix known problematic category values from CSV inconsistencies
   const categoryMap: Record<string, string> = {
     tv: "Smart Home",
     robotics: "Smart Home",
@@ -103,60 +92,77 @@ function normalizeCategory(raw: string): string {
     "?": "Electronics",
     "": "Electronics",
   };
-
   const lower = trimmed.toLowerCase();
   if (categoryMap[lower]) return categoryMap[lower];
-
   return trimmed || "Electronics";
 }
 
+let _cachedProducts: Product[] | null = null;
+
 export function getAllProducts(): Product[] {
-  const csvPath = path.join(process.cwd(), "..", "products", "top-1000.csv");
-  const csvContent = fs.readFileSync(csvPath, "utf-8");
-
-  const result = Papa.parse(csvContent, {
-    header: true,
-    skipEmptyLines: true,
-    transformHeader: (h: string) => h.trim(),
-  });
-
-  const seen = new Set<string>();
-  const products: Product[] = [];
-
-  for (const row of result.data as Record<string, string>[]) {
-    const name = (row["Product Name"] || "").trim();
-    if (!name) continue;
-
-    const slug = slugify(name);
-
-    // Deduplicate by slug (CSV has some duplicate entries)
-    if (seen.has(slug)) continue;
-    seen.add(slug);
-
-    const category = normalizeCategory(row["Category"]);
-    const price = parsePrice(row["Price Range"]);
-    const reviewCount = parseReviewCount(row["Review Count"]);
-    const rating = parseRating(row["Rating"]);
-    const bsr = (row["BSR"] || "").trim();
-    const affiliatePotential = parseInt(row["Affiliate Potential"] || "7", 10);
-
-    products.push({
-      name,
-      slug,
-      category,
-      categorySlug: slugify(category),
-      priceRange: price.display,
-      priceMin: price.min,
-      reviewCount,
-      rating,
-      bsr,
-      affiliatePotential: isNaN(affiliatePotential) ? 7 : affiliatePotential,
-      amazonUrl: buildAmazonUrl(name),
-      imageUrl: PRODUCT_IMAGES[slug] || "",
+  if (_cachedProducts) return _cachedProducts;
+  try {
+    // Try multiple path candidates to find the CSV
+    const candidates = [
+      path.join(process.cwd(), "..", "products", "top-1000.csv"),
+      path.join(process.cwd(), "products", "top-1000.csv"),
+      path.resolve("..", "products", "top-1000.csv"),
+    ];
+    let csvContent: string | null = null;
+    for (const p of candidates) {
+      try {
+        csvContent = fs.readFileSync(p, "utf-8");
+        break;
+      } catch {
+        // try next candidate
+      }
+    }
+    if (!csvContent) {
+      console.warn("Could not find top-1000.csv in any expected location");
+      _cachedProducts = [];
+      return [];
+    }
+    const result = Papa.parse(csvContent, {
+      header: true,
+      skipEmptyLines: true,
+      transformHeader: (h: string) => h.trim(),
     });
+    const seen = new Set<string>();
+    const products: Product[] = [];
+    for (const row of result.data as Record<string, string>[]) {
+      const name = (row["Product Name"] || "").trim();
+      if (!name) continue;
+      const slug = slugify(name);
+      if (seen.has(slug)) continue;
+      seen.add(slug);
+      const category = normalizeCategory(row["Category"]);
+      const price = parsePrice(row["Price Range"]);
+      const reviewCount = parseReviewCount(row["Review Count"]);
+      const rating = parseRating(row["Rating"]);
+      const bsr = (row["BSR"] || "").trim();
+      const affiliatePotential = parseInt(row["Affiliate Potential"] || "7", 10);
+      products.push({
+        name,
+        slug,
+        category,
+        categorySlug: slugify(category),
+        priceRange: price.display,
+        priceMin: price.min,
+        reviewCount,
+        rating,
+        bsr,
+        affiliatePotential: isNaN(affiliatePotential) ? 7 : affiliatePotential,
+        amazonUrl: buildAmazonUrl(name),
+        imageUrl: PRODUCT_IMAGES[slug] || "",
+      });
+    }
+    _cachedProducts = products;
+    return products;
+  } catch (error) {
+    console.error("Error loading products:", error);
+    _cachedProducts = [];
+    return [];
   }
-
-  return products;
 }
 
 export function getProductBySlug(slug: string): Product | undefined {
