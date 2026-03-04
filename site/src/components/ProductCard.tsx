@@ -8,23 +8,40 @@ export default function ProductCard({ product }: { product: Product }) {
 
   return (
     <div className="group relative bg-[#141416] border border-[#1f1f23] rounded-xl overflow-hidden transition-all duration-300 hover:border-orange-500/30 hover:shadow-lg hover:shadow-orange-500/5 hover:-translate-y-1">
-      {/* Product image placeholder */}
+      {/* Product image */}
       <Link href={`/products/${product.slug}`} className="block">
         <div className="relative aspect-[4/3] bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center overflow-hidden">
-          <div className="text-5xl opacity-30 group-hover:opacity-50 transition-opacity group-hover:scale-110 duration-300">
+          {product.imageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={product.imageUrl}
+              alt={product.name}
+              className="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105"
+              onError={(e) => {
+                const target = e.currentTarget;
+                target.style.display = 'none';
+                const fallback = target.nextElementSibling as HTMLElement;
+                if (fallback) fallback.style.display = 'flex';
+              }}
+            />
+          ) : null}
+          <div
+            className="text-5xl opacity-30 group-hover:opacity-50 transition-opacity group-hover:scale-110 duration-300 items-center justify-center"
+            style={{ display: product.imageUrl ? 'none' : 'flex' }}
+          >
             {product.categorySlug.includes("gaming") ? "🎮" :
-             product.categorySlug.includes("laptop") || product.categorySlug === "computers" ? "💻" :
-             product.categorySlug === "headphones" || product.categorySlug === "audio" ? "🎧" :
-             product.categorySlug === "speakers" ? "🔊" :
-             product.categorySlug === "monitors" ? "🖥️" :
-             product.categorySlug === "photography" ? "📷" :
-             product.categorySlug === "drones" ? "✈️" :
-             product.categorySlug === "kitchen" ? "🍳" :
-             product.categorySlug === "smart-home" ? "🏠" :
-             product.categorySlug === "security" ? "🔒" :
-             product.categorySlug === "furniture" ? "🪑" :
-             product.categorySlug === "fitness" ? "💪" :
-             "📦"}
+              product.categorySlug.includes("laptop") || product.categorySlug === "computers" ? "💻" :
+              product.categorySlug === "headphones" || product.categorySlug === "audio" ? "🎧" :
+              product.categorySlug === "speakers" ? "🔊" :
+              product.categorySlug === "monitors" ? "🖥️" :
+              product.categorySlug === "photography" ? "📷" :
+              product.categorySlug === "drones" ? "✈️" :
+              product.categorySlug === "kitchen" ? "🍳" :
+              product.categorySlug === "smart-home" ? "🏠" :
+              product.categorySlug === "security" ? "🔒" :
+              product.categorySlug === "furniture" ? "🪑" :
+              product.categorySlug === "fitness" ? "💪" :
+              "📦"}
           </div>
           {product.affiliatePotential >= 9 && (
             <div className="absolute top-3 left-3 bg-orange-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
@@ -56,14 +73,14 @@ export default function ProductCard({ product }: { product: Product }) {
 
         {/* Price + CTA */}
         <div className="flex items-center justify-between">
-          <span className="text-lg font-bold text-white">{product.priceRange}</span>
+          <span className="text-sm font-bold text-white">{product.priceRange}</span>
           <a
             href={product.amazonUrl}
             target="_blank"
-            rel="noopener noreferrer nofollow"
-            className="bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
+            rel="noopener noreferrer"
+            className="text-xs bg-orange-500 hover:bg-orange-400 text-white font-semibold px-3 py-1.5 rounded-lg transition-colors"
           >
-            View Deal
+            View on Amazon
           </a>
         </div>
       </div>
