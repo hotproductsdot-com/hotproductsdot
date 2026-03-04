@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getAllProducts, getProductBySlug, getProductsByCategory } from "@/lib/products";
+import { getAllProducts, getProductBySlug, getProductsByCategorySlug } from "@/lib/products";
 import RatingStars from "@/components/RatingStars";
 import ProductGrid from "@/components/ProductGrid";
 import { getCategoryColor, formatNumber } from "@/lib/utils";
@@ -10,7 +10,7 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return getAllProducts().map((p) => ({ slug: p.slug }));
 }
 
@@ -34,7 +34,7 @@ export default async function ProductDetailPage({ params }: Props) {
   const product = getProductBySlug(slug);
   if (!product) notFound();
 
-  const related = getProductsByCategory(product.categorySlug)
+  const related = getProductsByCategorySlug(product.categorySlug)
     .filter((p) => p.slug !== product.slug)
     .slice(0, 4);
 
@@ -61,7 +61,7 @@ export default async function ProductDetailPage({ params }: Props) {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <div className="max-w-5xl mx-auto px-4 py-12">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -82,23 +82,30 @@ export default async function ProductDetailPage({ params }: Props) {
 
       {/* Product detail */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-16">
-        {/* Image placeholder */}
-        <div className="aspect-square bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-2xl flex items-center justify-center border border-[#1f1f23]">
-          <div className="text-8xl opacity-30">
-            {product.categorySlug.includes("gaming") ? "🎮" :
-             product.categorySlug.includes("laptop") || product.categorySlug === "computers" ? "💻" :
-             product.categorySlug === "headphones" || product.categorySlug === "audio" ? "🎧" :
-             product.categorySlug === "speakers" ? "🔊" :
-             product.categorySlug === "monitors" ? "🖥️" :
-             product.categorySlug === "photography" ? "📷" :
-             product.categorySlug === "drones" ? "✈️" :
-             product.categorySlug === "kitchen" ? "🍳" :
-             product.categorySlug === "smart-home" ? "🏠" :
-             product.categorySlug === "security" ? "🔒" :
-             product.categorySlug === "furniture" ? "🪑" :
-             product.categorySlug === "fitness" ? "💪" :
-             "📦"}
-          </div>
+        {/* Product Image */}
+        <div className="aspect-square bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-2xl flex items-center justify-center border border-[#1f1f23] overflow-hidden">
+          {product.imageUrl ? (
+            <img
+              src={product.imageUrl}
+              alt={product.name}
+              className="w-full h-full object-contain p-8"
+            />
+          ) : (
+            <div className="text-8xl opacity-30">
+              {product.categorySlug.includes("gaming") ? "🎮" :
+               product.categorySlug.includes("laptop") || product.categorySlug === "computers" ? "💻" :
+               product.categorySlug === "headphones" || product.categorySlug === "audio" ? "🎧" :
+               product.categorySlug === "speakers" ? "🔊" :
+               product.categorySlug === "monitors" ? "🖥️" :
+               product.categorySlug === "photography" ? "📷" :
+               product.categorySlug === "drones" ? "✈️" :
+               product.categorySlug === "kitchen" ? "🍳" :
+               product.categorySlug === "smart-home" ? "🏠" :
+               product.categorySlug === "security" ? "🔒" :
+               product.categorySlug === "furniture" ? "🪑" :
+               product.categorySlug === "fitness" ? "💪" : "📦"}
+            </div>
+          )}
         </div>
 
         {/* Details */}
@@ -106,18 +113,15 @@ export default async function ProductDetailPage({ params }: Props) {
           <span className={`inline-block self-start text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider mb-4 ${categoryColor}`}>
             {product.category}
           </span>
-
           <h1 className="text-3xl sm:text-4xl font-bold text-white leading-tight mb-4">
             {product.name}
           </h1>
-
           <div className="flex items-center gap-3 mb-6">
             <RatingStars rating={product.rating} size="lg" />
             <span className="text-sm text-zinc-400">
               {formatNumber(product.reviewCount)} reviews
             </span>
           </div>
-
           <div className="text-3xl font-bold text-white mb-6">
             {product.priceRange}
           </div>
@@ -170,7 +174,6 @@ export default async function ProductDetailPage({ params }: Props) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
           </a>
-
           <p className="text-[10px] text-zinc-500 mt-3">
             * As an Amazon Associate, we earn from qualifying purchases. Price may vary.
           </p>
