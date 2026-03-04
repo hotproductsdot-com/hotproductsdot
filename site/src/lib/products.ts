@@ -20,6 +20,7 @@ export interface Product {
 const AFFILIATE_TAG = "hotproductsdot-com-20";
 
 // Known product image URLs from Amazon (ASIN-based image CDN)
+// These serve as overrides or fallbacks if ASIN extraction fails
 const PRODUCT_IMAGES: Record<string, string> = {
   "apple-macbook-air-13-m4": "https://m.media-amazon.com/images/I/71vFKBpKakL._AC_SX679_.jpg",
   "dell-xps-15-laptop": "https://m.media-amazon.com/images/I/71cJMcEVmnL._AC_SX679_.jpg",
@@ -48,8 +49,8 @@ function slugify(text: string): string {
 function parsePrice(raw: string): { display: string; min: number } {
   if (!raw) return { display: "Check Price", min: 0 };
   const cleaned = raw.replace(/[$,]/g, "").trim();
-  if (!/\d/.test(cleaned)) return { display: "Check Price", min: 0 };
-  const rangeMatch = cleaned.match(/(\d+)\s*-\s*(\d+)/);
+  if (!/\\d/.test(cleaned)) return { display: "Check Price", min: 0 };
+  const rangeMatch = cleaned.match(/(\\d+)\\s*-\\s*(\\d+)/);
   if (rangeMatch) {
     const low = parseInt(rangeMatch[1], 10);
     const high = parseInt(rangeMatch[2], 10);
@@ -59,7 +60,7 @@ function parsePrice(raw: string): { display: string; min: number } {
       min: low,
     };
   }
-  const singleMatch = cleaned.match(/(\d+)/);
+  const singleMatch = cleaned.match(/(\\d+)/);
   if (singleMatch) {
     const price = parseInt(singleMatch[1], 10);
     if (price === 0) return { display: "Check Price", min: 0 };
@@ -102,12 +103,12 @@ let _cachedProducts: Product[] | null = null;
 export function getAllProducts(): Product[] {
   if (_cachedProducts) return _cachedProducts;
   try {
-    // Try multiple path candidates to find the CSV
     const candidates = [
       path.join(process.cwd(), "..", "products", "top-1000.csv"),
       path.join(process.cwd(), "products", "top-1000.csv"),
       path.resolve("..", "products", "top-1000.csv"),
     ];
+
     let csvContent: string | null = null;
     for (const p of candidates) {
       try {
@@ -117,30 +118,48 @@ export function getAllProducts(): Product[] {
         // try next candidate
       }
     }
+
     if (!csvContent) {
       console.warn("Could not find top-1000.csv in any expected location");
       _cachedProducts = [];
       return [];
     }
+
     const result = Papa.parse(csvContent, {
       header: true,
       skipEmptyLines: true,
       transformHeader: (h: string) => h.trim(),
     });
+
     const seen = new Set<string>();
     const products: Product[] = [];
+
     for (const row of result.data as Record<string, string>[]) {
       const name = (row["Product Name"] || "").trim();
       if (!name) continue;
+      
       const slug = slugify(name);
       if (seen.has(slug)) continue;
       seen.add(slug);
+
       const category = normalizeCategory(row["Category"]);
       const price = parsePrice(row["Price Range"]);
       const reviewCount = parseReviewCount(row["Review Count"]);
       const rating = parseRating(row["Rating"]);
       const bsr = (row["BSR"] || "").trim();
-      const affiliatePotential = parseInt(row["Affiliate Potential"] || "7", 10);
+      const affiliatePotentialStr = row["Affiliate Potential"] || "7";
+      const affiliatePotential = parseInt(affiliatePotentialStr, 10);
+      
+      const csvAmazonUrl = (row["Amazon URL"] || "").trim();
+      const amazonUrl = csvAmazonUrl || buildAmazonUrl(name);
+      
+      const asinMatch = amazonUrl.match(/\\/(?:dp|gp\\/product)\\/([A-Z0-9]{10})/i);
+      const asin = asinMatch ? asinMatch[1] : null;
+      
+      const imageUrl = asin 
+        ? `https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&MarketPlace=US&ASIN=\${asin}&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=_SL500_`
+        : (PRODUCT_IMAGES[slug] || "");
+
       products.push({
         name,
         slug,
@@ -152,10 +171,11 @@ export function getAllProducts(): Product[] {
         rating,
         bsr,
         affiliatePotential: isNaN(affiliatePotential) ? 7 : affiliatePotential,
-        amazonUrl: buildAmazonUrl(name),
-        imageUrl: PRODUCT_IMAGES[slug] || "",
+        amazonUrl,
+        imageUrl,
       });
     }
+
     _cachedProducts = products;
     return products;
   } catch (error) {
