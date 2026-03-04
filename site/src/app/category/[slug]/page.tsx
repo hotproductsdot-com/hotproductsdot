@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ProductGrid from "@/components/ProductGrid";
-import { getAllProducts, getProductsByCategorySlug } from "@/lib/products";
+import { getProductsByCategorySlug } from "@/lib/products";
 import { getAllCategories, getCategoryBySlug } from "@/lib/categories";
 
 interface Props {
@@ -33,7 +33,6 @@ export default async function CategoryPage({ params }: Props) {
     .sort((a, b) => b.affiliatePotential - a.affiliatePotential || b.rating - a.rating);
 
   const allCategories = getAllCategories();
-  void getAllProducts;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
