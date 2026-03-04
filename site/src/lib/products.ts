@@ -157,8 +157,7 @@ export function getAllProducts(): Product[] {
       const asin = asinMatch ? asinMatch[1] : null;
       
       const imageUrl = asin 
-        ? `https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&MarketPlace=US&ASIN=${asin}&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=_SL500_`
-        : (PRODUCT_IMAGES[slug] || "");
+      ? `https://m.media-amazon.com/images/P/${asin}.jpg`        : (PRODUCT_IMAGES[slug] || "");
 
       products.push({
         name,
