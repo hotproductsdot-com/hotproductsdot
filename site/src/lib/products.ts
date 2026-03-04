@@ -14,6 +14,8 @@ export interface Product {
   bsr: string;
   affiliatePotential: number;
   amazonUrl: string;
+  asin: string;
+  imageUrl: string;
 }
 
 const AFFILIATE_TAG = "hotproducts-20";
@@ -67,9 +69,19 @@ function parseRating(raw: string): number {
   return isNaN(num) || num < 1 || num > 5 ? 4.5 : num;
 }
 
-function buildAmazonUrl(productName: string): string {
+function buildAmazonSearchUrl(productName: string): string {
   const query = encodeURIComponent(productName);
   return `https://www.amazon.com/s?k=${query}&tag=${AFFILIATE_TAG}`;
+}
+
+function extractAsin(amazonUrl: string): string {
+  const match = amazonUrl.match(/\/dp\/([A-Z0-9]{10})/);
+  return match ? match[1] : "";
+}
+
+function buildImageUrl(asin: string): string {
+  if (!asin) return "";
+  return `https://m.media-amazon.com/images/P/${asin}._AC_SX300_.jpg`;
 }
 
 function normalizeCategory(raw: string): string {
@@ -120,6 +132,10 @@ export function getAllProducts(): Product[] {
     const bsr = (row["BSR"] || "").trim();
     const affiliatePotential = parseInt(row["Affiliate Potential"] || "7", 10);
 
+    const csvAmazonUrl = (row["Amazon URL"] || "").trim();
+    const asin = extractAsin(csvAmazonUrl);
+    const amazonUrl = csvAmazonUrl || buildAmazonSearchUrl(name);
+
     products.push({
       name,
       slug,
@@ -131,7 +147,9 @@ export function getAllProducts(): Product[] {
       rating,
       bsr,
       affiliatePotential: isNaN(affiliatePotential) ? 7 : affiliatePotential,
-      amazonUrl: buildAmazonUrl(name),
+      amazonUrl,
+      asin,
+      imageUrl: buildImageUrl(asin),
     });
   }
 

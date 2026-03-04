@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getAllProducts, getProductBySlug, getProductsByCategory } from "@/lib/products";
 import RatingStars from "@/components/RatingStars";
 import ProductGrid from "@/components/ProductGrid";
+import ProductDetailImage from "@/components/ProductDetailImage";
 import { getCategoryColor, formatNumber } from "@/lib/utils";
 
 interface Props {
@@ -82,24 +83,8 @@ export default async function ProductDetailPage({ params }: Props) {
 
       {/* Product detail */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-16">
-        {/* Image placeholder */}
-        <div className="aspect-square bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-2xl flex items-center justify-center border border-[#1f1f23]">
-          <div className="text-8xl opacity-30">
-            {product.categorySlug.includes("gaming") ? "🎮" :
-             product.categorySlug.includes("laptop") || product.categorySlug === "computers" ? "💻" :
-             product.categorySlug === "headphones" || product.categorySlug === "audio" ? "🎧" :
-             product.categorySlug === "speakers" ? "🔊" :
-             product.categorySlug === "monitors" ? "🖥️" :
-             product.categorySlug === "photography" ? "📷" :
-             product.categorySlug === "drones" ? "✈️" :
-             product.categorySlug === "kitchen" ? "🍳" :
-             product.categorySlug === "smart-home" ? "🏠" :
-             product.categorySlug === "security" ? "🔒" :
-             product.categorySlug === "furniture" ? "🪑" :
-             product.categorySlug === "fitness" ? "💪" :
-             "📦"}
-          </div>
-        </div>
+        {/* Product image */}
+        <ProductDetailImage product={product} />
 
         {/* Details */}
         <div className="flex flex-col justify-center">

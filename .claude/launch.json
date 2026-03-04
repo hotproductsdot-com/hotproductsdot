@@ -2,9 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "hotproducts-site",
+      "name": "hotproducts-dev",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["C:/Program Files/nodejs/node_modules/npm/bin/npx-cli.js", "serve", "."],
+      "runtimeArgs": ["C:/Program Files/nodejs/node_modules/npm/bin/npx-cli.js", "next", "dev"],
+      "cwd": "site",
       "port": 3000,
       "autoPort": true
     }
