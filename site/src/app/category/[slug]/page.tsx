@@ -9,7 +9,7 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return getAllCategories().map((c) => ({ slug: c.slug }));
 }
 
@@ -33,6 +33,7 @@ export default async function CategoryPage({ params }: Props) {
     .sort((a, b) => b.affiliatePotential - a.affiliatePotential || b.rating - a.rating);
 
   const allCategories = getAllCategories();
+  void getAllProducts;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
@@ -42,41 +43,45 @@ export default async function CategoryPage({ params }: Props) {
         <span>/</span>
         <Link href="/products" className="hover:text-white transition-colors">Products</Link>
         <span>/</span>
-        <span className="text-zinc-300">{category.name}</span>
+        <span className="text-zinc-300">{category!.name}</span>
       </nav>
 
       {/* Category header */}
       <div className="mb-10">
         <div className="flex items-center gap-3 mb-3">
-          <span className="text-4xl">{category.icon}</span>
-          <h1 className="text-3xl font-bold text-white">{category.name}</h1>
+          <span className="text-4xl">{category!.icon}</span>
+          <h1 className="text-3xl font-bold text-white">{category!.name}</h1>
         </div>
         <p className="text-sm text-zinc-400">
-          {products.length} handpicked {category.name.toLowerCase()} products, ranked by quality and customer reviews
+          {products.length} handpicked {category!.name.toLowerCase()} products, ranked by quality and customer reviews
         </p>
       </div>
 
       {/* Products */}
       <ProductGrid products={products} />
 
-      {/* Other categories */}
-      <section className="mt-16">
-        <h2 className="text-xl font-bold text-white mb-6">Explore Other Categories</h2>
-        <div className="flex flex-wrap gap-3">
-          {allCategories
-            .filter((c) => c.slug !== slug)
-            .slice(0, 10)
-            .map((cat) => (
-              <Link
-                key={cat.slug}
-                href={`/category/${cat.slug}`}
-                className="bg-[#141416] border border-[#1f1f23] hover:border-orange-500/30 text-sm text-zinc-300 hover:text-white px-4 py-2 rounded-lg transition-all"
-              >
-                {cat.icon} {cat.name} ({cat.count})
-              </Link>
-            ))}
-        </div>
-      </section>
+      {/* Related Categories */}
+      {allCategories.length > 1 && (
+        <section className="mt-16">
+          <h2 className="text-xl font-bold text-white mb-6">Browse Other Categories</h2>
+          <div className="flex flex-wrap gap-3">
+            {allCategories
+              .filter((c) => c.slug !== slug)
+              .slice(0, 12)
+              .map((cat) => (
+                <Link
+                  key={cat.slug}
+                  href={`/category/${cat.slug}`}
+                  className="flex items-center gap-2 bg-[#141416] border border-[#1f1f23] rounded-lg px-4 py-2 text-sm text-zinc-400 hover:text-white hover:border-orange-500/30 transition-all"
+                >
+                  <span>{cat.icon}</span>
+                  <span>{cat.name}</span>
+                  <span className="text-zinc-600 text-xs">({cat.count})</span>
+                </Link>
+              ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }
