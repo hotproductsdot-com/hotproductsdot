@@ -14,9 +14,29 @@ export interface Product {
   bsr: string;
   affiliatePotential: number;
   amazonUrl: string;
+  imageUrl: string;
 }
 
-const AFFILIATE_TAG = "hotproducts-20";
+const AFFILIATE_TAG = "hotproductsdot-com-20";
+
+// Known product image URLs from Amazon (ASIN-based image CDN)
+const PRODUCT_IMAGES: Record<string, string> = {
+  "apple-macbook-air-13-m4": "https://m.media-amazon.com/images/I/71vFKBpKakL._AC_SX679_.jpg",
+  "dell-xps-15-laptop": "https://m.media-amazon.com/images/I/71cJMcEVmnL._AC_SX679_.jpg",
+  "apple-airpods-max": "https://m.media-amazon.com/images/I/81MZBCS2ygL._AC_SX679_.jpg",
+  "sony-wh-1000xm5": "https://m.media-amazon.com/images/I/61bBeAI5s8L._AC_SX679_.jpg",
+  "apple-airpods-pro-2": "https://m.media-amazon.com/images/I/61SUj2aKoEL._AC_SX679_.jpg",
+  "canon-eos-r5": "https://m.media-amazon.com/images/I/91BRT0FACJL._AC_SX679_.jpg",
+  "dji-air-3s-drone": "https://m.media-amazon.com/images/I/71L68tKzZcL._AC_SX679_.jpg",
+  "herman-miller-aeron": "https://m.media-amazon.com/images/I/71kj3KbzQiL._AC_SX679_.jpg",
+  "dyson-v15-detect": "https://m.media-amazon.com/images/I/51MXMlxzxeL._AC_SX679_.jpg",
+  "ring-video-doorbell-pro-2": "https://m.media-amazon.com/images/I/71VQKX5-U5L._AC_SX679_.jpg",
+  "theragun-pro-massage": "https://m.media-amazon.com/images/I/61CGHv6kmWL._AC_SX679_.jpg",
+  "ninja-af400-air-fryer": "https://m.media-amazon.com/images/I/81BVaXA6UrL._AC_SX679_.jpg",
+  "peloton-bike": "https://m.media-amazon.com/images/I/51amT7VJPLL._AC_SX679_.jpg",
+  "sonos-era-300": "https://m.media-amazon.com/images/I/51eTMH4WZJL._AC_SX679_.jpg",
+  "breville-oracle-touch": "https://m.media-amazon.com/images/I/91MtBPKtobL._AC_SX679_.jpg",
+};
 
 function slugify(text: string): string {
   return text
@@ -132,6 +152,7 @@ export function getAllProducts(): Product[] {
       bsr,
       affiliatePotential: isNaN(affiliatePotential) ? 7 : affiliatePotential,
       amazonUrl: buildAmazonUrl(name),
+      imageUrl: PRODUCT_IMAGES[slug] || "",
     });
   }
 
@@ -148,6 +169,6 @@ export function getFeaturedProducts(count = 12): Product[] {
     .slice(0, count);
 }
 
-export function getProductsByCategory(categorySlug: string): Product[] {
+export function getProductsByCategorySlug(categorySlug: string): Product[] {
   return getAllProducts().filter((p) => p.categorySlug === categorySlug);
 }
