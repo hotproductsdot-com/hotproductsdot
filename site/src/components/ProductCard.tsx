@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import type { Product } from "@/lib/products";
 import RatingStars from "./RatingStars";
@@ -30,18 +32,18 @@ export default function ProductCard({ product }: { product: Product }) {
             style={{ display: product.imageUrl ? 'none' : 'flex' }}
           >
             {product.categorySlug.includes("gaming") ? "🎮" :
-              product.categorySlug.includes("laptop") || product.categorySlug === "computers" ? "💻" :
-              product.categorySlug === "headphones" || product.categorySlug === "audio" ? "🎧" :
-              product.categorySlug === "speakers" ? "🔊" :
-              product.categorySlug === "monitors" ? "🖥️" :
-              product.categorySlug === "photography" ? "📷" :
-              product.categorySlug === "drones" ? "✈️" :
-              product.categorySlug === "kitchen" ? "🍳" :
-              product.categorySlug === "smart-home" ? "🏠" :
-              product.categorySlug === "security" ? "🔒" :
-              product.categorySlug === "furniture" ? "🪑" :
-              product.categorySlug === "fitness" ? "💪" :
-              "📦"}
+             product.categorySlug.includes("laptop") || product.categorySlug === "computers" ? "💻" :
+             product.categorySlug === "headphones" || product.categorySlug === "audio" ? "🎧" :
+             product.categorySlug === "speakers" ? "🔊" :
+             product.categorySlug === "monitors" ? "🖥️" :
+             product.categorySlug === "photography" ? "📷" :
+             product.categorySlug === "drones" ? "✈️" :
+             product.categorySlug === "kitchen" ? "🍳" :
+             product.categorySlug === "smart-home" ? "🏠" :
+             product.categorySlug === "security" ? "🔒" :
+             product.categorySlug === "furniture" ? "🪑" :
+             product.categorySlug === "fitness" ? "💪" :
+             "📦"}
           </div>
           {product.affiliatePotential >= 9 && (
             <div className="absolute top-3 left-3 bg-orange-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
