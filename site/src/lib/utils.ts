@@ -38,3 +38,33 @@ export const CATEGORY_COLORS: Record<string, string> = {
 export function getCategoryColor(slug: string): string {
   return CATEGORY_COLORS[slug] || "bg-zinc-500/20 text-zinc-400";
 }
+
+const CATEGORY_EMOJIS: Record<string, string> = {
+  laptops: "💻",
+  computers: "💻",
+  "gaming-laptops": "🎮",
+  "gaming-desktops": "🎮",
+  "gaming-peripherals": "🖱️",
+  "gaming-headsets": "🎮",
+  headphones: "🎧",
+  audio: "🎧",
+  speakers: "🔊",
+  monitors: "🖥️",
+  "smart-home": "🏠",
+  "smart-displays": "🏠",
+  security: "🔒",
+  photography: "📷",
+  drones: "✈️",
+  kitchen: "🍳",
+  home: "🧹",
+  furniture: "🪑",
+  fitness: "💪",
+  tablets: "📱",
+  streaming: "📺",
+  "personal-care": "✨",
+  electronics: "📦",
+};
+
+export function getCategoryEmoji(slug: string): string {
+  return CATEGORY_EMOJIS[slug] || "📦";
+}
